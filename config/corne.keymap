@@ -69,38 +69,3 @@
                 };
         };
 };
-
-&spi1 {
-    status = "okay";
-
-    ws2812: ws2812@0 {
-        compatible = "worldsemi,ws2812-spi";
-        label = "WS2812";
-        reg = <0>;
-        spi-max-frequency = <4000000>;
-        chain-length = <54>;   // total de LEDs
-        color-mapping = <LED_COLOR_MAPPING_RGB>;
-    };
-};
-
-&rgb_underglow {
-    status = "okay";
-    led-strip = <&ws2812>;
-    chain-length = <54>;   // mismo número
-};
-
-
-&kp RGB_TOG  // enciende/apaga
-&kp RGB_HUI  // sube hue (cambia color)
-&kp RGB_SAD  // baja saturación (si lo bajas a 0 = blanco)
-&kp RGB_BRI  // sube brillo
-
-&rgb_underglow {
-    status = "okay";
-    led-strip = <&ws2812>;
-    chain-length = <54>;
-
-    // fuerza encendido en arranque
-    color = <255 255 255>;   // blanco
-    brightness = <255>;
-};
