@@ -1,9 +1,17 @@
-/backlight {
+/ {
+    /* Nodo elegido por ZMK para backlight clásico */
+    chosen {
+        zmk,backlight = &backlight;
+    };
+};
+
+/* NODO BACKLIGHT */
+backlight: backlight {
     compatible = "zmk,backlight";
     leds = <&led0 &led1 &led2 &led3 &led4 &led5>;
 };
 
-/* Define cada LED con su pin GPIO correspondiente */
+/* Definición de cada LED clásico */
 led0: led0 {
     gpios = <&gpio0 2 GPIO_ACTIVE_HIGH>;
 };
@@ -28,7 +36,22 @@ led5: led5 {
     gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>;
 };
 
-/* Nodo elegido por ZMK para inicializar backlight */
-chosen {
-    zmk,backlight = &backlight;
+/* NODO UNDERGLOW WS2812 */
+&spi1 {
+    status = "okay";
+
+    ws2812: ws2812@0 {
+        compatible = "worldsemi,ws2812-spi";
+        label = "WS2812";
+        reg = <0>;
+        spi-max-frequency = <4000000>;
+        chain-length = <54>;   // Ajusta al número real de LEDs
+        color-mapping = <LED_COLOR_MAPPING_RGB>;
+    };
+};
+
+&rgb_underglow {
+    status = "okay";
+    led-strip = <&ws2812>;
+    chain-length = <54>;
 };
